@@ -43,8 +43,9 @@ const getAllVideos=asyncHandler(async(req,res)=>{
 
     res.status(200).json(new ApiResponse(200, result, "Videos retrieved successfully."));
 });
-// pass-->auth middle ware
+
 const publishAVideo = asyncHandler(async (req, res) => {
+
     const { title, description} = req.body
     const owner=req.user?._id
 
@@ -52,7 +53,6 @@ const publishAVideo = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Title and description are required.");
     }
 
-    // TODO: get video, upload to cloudinary, create video
 
     const videolocalpath=await req.file?.videoFile?.[0]?.path
     const thumbnaillocalpath= await req.file?.thumbnail?.[0]?.path
@@ -88,17 +88,17 @@ const publishAVideo = asyncHandler(async (req, res) => {
 })
 
 const getVideoById = asyncHandler(async (req, res) => {
+
     const { videoId } = req.params
-    //TODO: get video by id
 
     if(!videoId){
-        throw new ApiError(400,"videoid did not  for getVideoById")
+        throw new ApiError(400,"videoid did not get for getVideoById")
     }
 
     const findvideo=await Video.findById(videoId)
 
     if(!findvideo){
-        throw new ApiError(400,"find video did not  for getVideoById")
+        throw new ApiError(400,"find video did not get for getVideoById")
     }
 
     res.status(200)
@@ -138,7 +138,6 @@ const updateVideo = asyncHandler(async (req, res) => {
 
 const deleteVideo = asyncHandler(async (req, res) => {
     const { videoId } = req.params
-    //TODO: delete video
 
     if (!videoId) {
         throw new ApiError(400, "Video ID is required to delete the video.");
@@ -165,7 +164,6 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Video not found.");
     }
 
-    // Toggle the `isPublished` status
     video.isPublished = !video.isPublished;
     await video.save();
 

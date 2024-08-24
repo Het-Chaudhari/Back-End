@@ -7,9 +7,7 @@ import {Tweet} from "../models/tweet.models.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { Comment } from "../models/comment.models.js"
 
-// pass it through auth middle ware
 const toggleVideoLike = asyncHandler(async (req, res) => {
-    //TODO: toggle like on video
 
     const {videoId} = req.params
     const userid=req.user?._id
@@ -17,7 +15,7 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
     const checkvideo=await Video.findById(videoId)
     
     if(!checkvideo){
-        throw new ApiError(400,"video did not found while check video")
+        throw new ApiError(400,"video did not found while toggleVideoLike")
     }
 
     const existingLike = await Like.findOne({
@@ -43,9 +41,7 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
     }
 })
 
-// pass it through auth middle ware
 const toggleCommentLike = asyncHandler(async (req, res) => {
-    //TODO: toggle like on comment
 
     const { commentId } = req.params; 
     const userId = req.user?._id; 
@@ -53,7 +49,7 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
     const checkComment = await Comment.findById(commentId);
     
     if (!checkComment) {
-        throw new ApiError(400, "Comment not found");
+        throw new ApiError(400, "Comment not found while toggleCommentLike");
     }
 
     const existingLike = await Like.findOne({
@@ -78,9 +74,8 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
         );
     }
 })
-// pass it through auth middle ware
+
 const toggleTweetLike = asyncHandler(async (req, res) => {
-    //TODO: toggle like on tweet
 
     const { tweetId } = req.params; 
     const userId = req.user?._id; 
@@ -114,13 +109,14 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
     }
 }
 )
-// ama error che ke apde user[0] karine moklvanu ke user
+
 const getLikedVideos = asyncHandler(async (req, res) => {
-    //TODO: get all liked videos
+
     const userId=req.user?._id
     if(!userId){
         throw new ApiError(400,"can not get user id for getliked videos")
     }
+    
     const user=await Like.aggregate([
         {
             $match:{

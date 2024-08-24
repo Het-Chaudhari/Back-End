@@ -5,9 +5,9 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { Tweet } from "../models/tweet.models.js";
 import { User } from "../models/user.models.js";
 
-// pass-->auth middleware
+
 const createTweet = asyncHandler(async (req, res) => {
-    //TODO: create tweet
+
     const { content } = req.body;
     const owner = req.user?._id;
 
@@ -32,7 +32,7 @@ const createTweet = asyncHandler(async (req, res) => {
 });
 
 const getUserTweets = asyncHandler(async (req, res) => {
-    // TODO: get user tweets
+
     const {userId}=req.params;
     if(!userId){
         throw new ApiError(400,"user must required for getUserTweets")
@@ -77,7 +77,6 @@ const getUserTweets = asyncHandler(async (req, res) => {
 });
 
 const updateTweet = asyncHandler(async (req, res) => {
-    //TODO: update tweet
 
     const {tweetId}=req.params
     const {content}=req.body
@@ -103,7 +102,6 @@ const updateTweet = asyncHandler(async (req, res) => {
 });
 
 const deleteTweet = asyncHandler(async (req, res) => {
-    //TODO: delete tweet
 
     const {tweetId} =req.params
     if(!tweetId){

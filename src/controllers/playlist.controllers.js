@@ -5,9 +5,8 @@ import { Playlist } from "../models/playlist.models.js"
 import { User } from "../models/user.models.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
-// pass it through auth middle ware
+
 const createPlaylist = asyncHandler(async (req, res) => {
-    //TODO: create playlist
 
     const {name, description} = req.body
     const owner = req.user?._id;
@@ -38,7 +37,6 @@ const createPlaylist = asyncHandler(async (req, res) => {
 });
 
 const getUserPlaylists = asyncHandler(async (req, res) => {
-    //TODO: get user playlists
 
     const { userId } = req.params;
 
@@ -71,7 +69,6 @@ const getUserPlaylists = asyncHandler(async (req, res) => {
 });
 
 const getPlaylistById = asyncHandler(async (req, res) => {
-    //TODO: get playlist by id
 
     const {playlistId} = req.params
     if (!mongoose.Types.ObjectId.isValid(playlistId)) {
@@ -94,6 +91,7 @@ const getPlaylistById = asyncHandler(async (req, res) => {
 })
 
 const addVideoToPlaylist = asyncHandler(async (req, res) => {
+
     const {playlistId, videoId} = req.params
 
     const playlist = await Playlist.findById(playlistId);
@@ -116,7 +114,7 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
 })
 
 const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
-    // TODO: remove video from playlist
+
     const { playlistId, videoId } = req.params;
 
     const playlist = await Playlist.findById(playlistId);
@@ -138,7 +136,7 @@ const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
 })
 
 const deletePlaylist = asyncHandler(async (req, res) => {
-    // TODO: delete playlist
+
     const { playlistId } = req.params;
 
     const playlist = await Playlist.findById(playlistId);
@@ -154,6 +152,7 @@ const deletePlaylist = asyncHandler(async (req, res) => {
 })
 
 const updatePlaylist = asyncHandler(async (req, res) => {
+    
     const { playlistId } = req.params;
     const { name, description } = req.body;
 

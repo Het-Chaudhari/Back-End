@@ -7,16 +7,12 @@ import { Video } from "../models/vedio.models.js";
 import { User } from "../models/user.models.js";
 
 const getVideoComments = asyncHandler(async (req, res) => {
-    //TODO: get all comments for a video
-
-    // apda bhegu models che gana badha jema thi apde 
-    // query lagai ne je je comments na vedio==given id 
-    // ene add karo 
+   
     const {videoId} = req.params
     const {page = 1, limit = 10} = req.query
 
     if(!mongoose.Types.ObjectId.isValid(videoId)){
-        throw new ApiError(400,"we did not find video for get all comments for video")
+        throw new ApiError(400,"Error at getVideoComments->videoId")
     }
 
     const video=await Comment.aggregate([
@@ -60,14 +56,8 @@ const getVideoComments = asyncHandler(async (req, res) => {
 
 })
 
-// pass it from auth middle ware
 const addComment = asyncHandler(async (req, res) => {
-    // TODO: add a comment to a video
-
-    //req.body parthi comment ane vedio ni id avse jene 
-    //apde e video ni id che ke naii 
-    // e check karine comment ne e vedio ma add kari laishu
-
+   
     const {videoId} = req.params
     const {content}=req.body;
 
@@ -77,7 +67,7 @@ const addComment = asyncHandler(async (req, res) => {
 
     const video = await Video.findById(videoId);
     if (!video) {
-        throw new ApiError(404, "Video not found.");
+        throw new ApiError(404, "Video not found at addComment");
     }
 
     const newComment = await Comment.create({
@@ -92,18 +82,13 @@ const addComment = asyncHandler(async (req, res) => {
 
 })
 
-// pass it from auth middle ware
 const updateComment = asyncHandler(async (req, res) => {
-    // TODO: update a comment
-    // req.body parthi new and old comment malse
-    // ane req.params parathi vedio id 
-    // check ke old coment che jo haa to old ==new 
-
+    
     const { commentId } = req.params;  
     const { content } = req.body;      
 
     if (!content || content.trim() === "") {
-        throw new ApiError(400, "Comment content is required");  
+        throw new ApiError(400, "Comment content is required at updateComment");  
     }
 
     const updatedComment = await Comment.findOneAndUpdate(
@@ -122,7 +107,6 @@ const updateComment = asyncHandler(async (req, res) => {
 })
 
 const deleteComment = asyncHandler(async (req, res) => {
-    // TODO: delete a comment
 
     const { commentId } = req.params; 
 
@@ -138,5 +122,6 @@ const deleteComment = asyncHandler(async (req, res) => {
         new ApiResponse(200, deletedComment, "Comment deleted successfully")
     );
 })
+//hi my name is het
 
 export {getVideoComments,addComment,updateComment,deleteComment};

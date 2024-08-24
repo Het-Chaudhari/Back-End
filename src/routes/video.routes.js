@@ -5,7 +5,7 @@ import { upload } from '../middlewares/multer.middlewares.js';
 import { getAllVideos ,publishAVideo,getVideoById,updateVideo,deleteVideo,togglePublishStatus} from '../controllers/video.controlles.js';
 
 const router = Router();
-router.use(verifyJWT); // Apply verifyJWT middleware to all routes in this file
+router.use(verifyJWT); 
 
 router
     .route("/")

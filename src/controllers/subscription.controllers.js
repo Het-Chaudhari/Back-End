@@ -5,8 +5,9 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { Subscription } from "../models/subscription.models.js";
 import { User } from "../models/user.models.js";
 
-// pass--> auth middleware
+
 const toggleSubscription = asyncHandler(async (req, res) => {
+
     const { channelId } = req.params;
     const user = req.user?._id;
 
@@ -37,10 +38,11 @@ const toggleSubscription = asyncHandler(async (req, res) => {
 })
 
 const getUserChannelSubscribers = asyncHandler(async (req, res) => {
+
     const {channelId} = req.params
     
     if(!channelId){
-        throw new ApiError(400,"channeid did not while getUserChannelSubscribers")
+        throw new ApiError(400,"channeid did not get while getUserChannelSubscribers")
     }
     if (!mongoose.Types.ObjectId.isValid(channelId)) {
         throw new ApiError(400, "Invalid Channel ID");
@@ -76,11 +78,11 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
     ])
 
     res.status(200)
-    .json(new ApiResponse(200,allSubscriber,"we get all subscriber for channel"))
+    .json(new ApiResponse(200,allSubscriber,"we got all subscribers for channel"))
 })
 
-// controller to return channel list to which user has subscribed
 const getSubscribedChannels = asyncHandler(async (req, res) => {
+    
     const { subscriberId } = req.params;
 
     if (!subscriberId) {

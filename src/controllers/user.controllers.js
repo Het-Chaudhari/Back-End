@@ -8,16 +8,7 @@ import mongoose from "mongoose";
 import { upload } from "../middlewares/multer.middlewares.js";
 
 const generateaccessandrefreshtoken=  async(userId)=>{
-    // try {
-    //     const joitouser=await User.findById(userId)
-    //     const accesstoken=joitouser.generateAccessToken();
-    //     const refreshtoken=joitouser.generateRefreshToken();
-    //     joitouser.refreshToken=refreshtoken
-    //     await joitouser.save({validateBeforeSave:false})
-    //     return {accesstoken, refreshtoken}
-    // } catch (error) {
-    //     throw new ApiError(400,"something went wrong while generating refresh and access token")
-    // }
+    
     try {
         const user = await User.findById(userId)
         const accesstoken = user.generateAccessToken()
@@ -35,10 +26,10 @@ const generateaccessandrefreshtoken=  async(userId)=>{
 }
 
 const registeruser = asyncHandler(async (req, res) => {
-    console.log("hii");
+    // console.log("hii");
     
     const {fullname,email,username,password}=req.body;
-     console.log("req.body is  ",req.body);
+     //console.log("req.body is  ",req.body);
 
     if([fullname,email,username,password].some((field)=>
         field?.trim()===""
@@ -99,6 +90,7 @@ const registeruser = asyncHandler(async (req, res) => {
 });
 
 const loginuser = asyncHandler(async (req,res)=>{
+
     const {username,email,password}=req.body
 
     if(!(username || email)){
@@ -112,10 +104,10 @@ const loginuser = asyncHandler(async (req,res)=>{
         $or:[{email},{username}]
     })
 
-    if(!usercheckdata){// ana thi tame akho e user pan lai sako
+    if(!usercheckdata){
         throw new ApiError(404,"email or username not found")
     }
-    // password check karva mate 
+
     const ispasswordvalid= await usercheckdata.isPasswordCorrect(password)
 
     if(!ispasswordvalid){
@@ -126,14 +118,12 @@ const loginuser = asyncHandler(async (req,res)=>{
 
     const loggedinuser=await User.findById(usercheckdata._id)
     .select("-password -refreshToken")
-    // refreshtoken1 ave em ke che --------------------------//
 
-    const options={// anathi cookie khali server thi j modify thay frontend thi naii
+    const options={
         httpOnly:true,
         secure:true
     }
-// ahi dhyan rakhvu ke jo cookie mathi kai access karvu hoy to 
-// accesstoken1 and refreshtoken1 thi karvu
+
     return res.status(200).cookie("accesstoken",accesstoken,options)
     .cookie("refreshToken",refreshToken,options)
     .json(
@@ -170,7 +160,7 @@ const logoutuser=asyncHandler(async(req,res)=>{
 })
 
 const refreshAccessToken = asyncHandler(async(req,res)=>{
-    /// name is refreshtoken ///////////////////////////////////
+
     const rtoken=req.cookies.refreshToken || req.body.refreshToken
     if(!rtoken){
         throw new error(401,"token was not generated ");
@@ -213,7 +203,7 @@ const refreshAccessToken = asyncHandler(async(req,res)=>{
     }
 
 })
-//ane apde middleware mathi pass karvu padse 
+
 const changeCurrentPassword = asyncHandler(async(req, res) => {
 
     const {oldPassword, newPassword} = req.body
@@ -226,7 +216,7 @@ const changeCurrentPassword = asyncHandler(async(req, res) => {
         throw new error(403,"password was not correct")
     }
 
-    user.password=newPassword;// ama doubt kem ke password karine koi field che 
+    user.password=newPassword;
     await user.save({validateBeforeSave: false})
 
     return res
@@ -235,12 +225,13 @@ const changeCurrentPassword = asyncHandler(async(req, res) => {
 
 
 })
-// ane pan apde middleware mathi pass karvu padse 
+
 const getCurrentUser=asyncHandler(async(req,res)=>{
     return res.status(200).json(200,req.user,"current user fetch successfully");
 })
-// ane pan middle ware mathi pass karvu padse 
+
 const updateAccountDetails=asyncHandler(async(req,res)=>{
+    
     const {email,fullname}=req.body();
     if(!(fullname && email)){
         throw new ApiError(400,"email and password are wrong")
@@ -260,7 +251,7 @@ const updateAccountDetails=asyncHandler(async(req,res)=>{
     .status(200)
     .json(new ApiResponse(200,user,"email and username updated successfully"))
 });
-// ane apde multer middle ware  mathi moklishu
+
 const updateUserAvatar= asyncHandler(async(req,res)=>{
     const filepath=req.file?.path
 
@@ -288,7 +279,7 @@ const updateUserAvatar= asyncHandler(async(req,res)=>{
     .json(new ApiResponse(200,user,"avatar updated correctly"))
 
 })
-// aane apde multer mathi pass karishu 
+
 const updateUserCoverImage = asyncHandler(async(req, res) => {
     const coverImageLocalPath = req.file?.path
 
@@ -296,7 +287,6 @@ const updateUserCoverImage = asyncHandler(async(req, res) => {
         throw new ApiError(400, "Cover image file is missing")
     }
 
-    //TODO: delete old image - assignment
 
 
     const coverImage = await uploadOnCloudinary(coverImageLocalPath)
@@ -440,9 +430,6 @@ const getWatchHistory=asyncHandler(async(req,res)=>{
     res.status(200)
     .json(new ApiResponse(200,user[0].watchhistory,"Watch history fetched successfully"))
 })
-
-// jya jya apde req.user vapryu che tene tene apde middleware auth mathi 
-// pasar karvu pade to j ecookie vapri sake 
 
 
 
